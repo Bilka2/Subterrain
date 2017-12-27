@@ -2,7 +2,8 @@ data:extend({
       {
          type = "item",
          name = "subterranean-belt",
-         icon = "__Subterrain__/graphics/icons/underground-belt.png",
+         icon = "__Subterranean__/graphics/icons/underground-belt.png",
+		 icon_size = 32,
          flags = {"goes-to-quickbar"},
          subgroup = "belt",
          order = "b[underground-belt]-a[underground-belt]",
@@ -13,7 +14,8 @@ data:extend({
       {
          type = "item",
          name = "fast-subterranean-belt",
-         icon = "__Subterrain__/graphics/icons/fast-underground-belt.png",
+         icon = "__Subterranean__/graphics/icons/fast-underground-belt.png",
+		 icon_size = 32,
          flags = {"goes-to-quickbar"},
          subgroup = "belt",
          order = "b[underground-belt]-b[fast-underground-belt]",
@@ -24,7 +26,8 @@ data:extend({
       {
          type = "item",
          name = "express-subterranean-belt",
-         icon = "__Subterrain__/graphics/icons/express-underground-belt.png",
+         icon = "__Subterranean__/graphics/icons/express-underground-belt.png",
+		 icon_size = 32,
          flags = {"goes-to-quickbar"},
          subgroup = "belt",
          order = "b[underground-belt]-c[express-underground-belt]",
@@ -35,7 +38,8 @@ data:extend({
       {
          type = "item",
          name = "subterranean-pipe",
-         icon = "__Subterrain__/graphics/icons/pipe-to-ground.png",
+         icon = "__Subterranean__/graphics/icons/pipe-to-ground.png",
+		 icon_size = 32,
          flags = {"goes-to-quickbar"},
          subgroup = "energy-pipe-distribution",
          order = "a[pipe]-b[pipe-to-ground]",

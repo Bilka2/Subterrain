@@ -76,8 +76,8 @@ function subterrainPipesOnBuilt(event)
 
 	if settings.global["subterrain-pipe-cost-multiplier"].value <= 0 then return nil end --no pipe cost
 
-	local otherPipe = entity.neighbours[2] or nil
-
+	local otherPipe = entity.neighbours[1][1] or nil
+	
 	if not otherPipe then
 		return nil --no need to do anything if this is the first placed
 	end
@@ -129,7 +129,7 @@ function bobsLogisticsOnBuilt(event)
 end
 
 
-script.on_event({defines.events.on_preplayer_mined_item}, --Called before the mined item is removed from the map
+script.on_event({defines.events.on_pre_player_mined_item}, --Called before the mined item is removed from the map
 	function(event)
 		local entity = event.entity
 		local player = game.players[event.player_index]
@@ -143,26 +143,37 @@ script.on_event({defines.events.on_preplayer_mined_item}, --Called before the mi
 	end
 )
 
+local function insert_items(player, name, count)
+	if player.can_insert{name = name, count = count} then
+		local inserted = player.insert{name = name, count = count}
+		if inserted < count then
+			player.surface.spill_item_stack(player.position, {name = name, count = count - inserted}, true)
+		end
+	else
+		player.surface.spill_item_stack(player.position, {name = name, count = count}, true)
+	end
+end
+
+
 --actions for subterrain pipes on mine
 function subterrainOnMinePipes(event)
 	if (not settings.global["subterrain-should-refund-pipes"].value) or (settings.global["subterrain-pipe-refund-multiplier"].value <= 0) then --don't do any of this if not refunding pipes
 		return
 	end
 	local entity = event.entity
-	local otherEntity = entity.neighbours[2] or entity --the opening end of the pair of pipes or itself
+	local otherEntity = entity.neighbours[1][1] or false --the opening end of the pair of pipes 
+	if not otherEntity then return end --pipe isnt connected to anything
+	
 	local distance = getDistance(entity, otherEntity)
-
-	if entity == otherEntity  or (entity.force.name == "neutral") or (otherEntity.force.name == "neutral") then --it has no pair, aka itself, or a reward was already given
+	if (entity.force.name == "neutral") or (otherEntity.force.name == "neutral") then --a reward was already given
 		return
 	end
 
 	otherEntity.force = "neutral"
 	local calc = (math.floor((distance * settings.global["subterrain-pipe-cost-multiplier"].value) * settings.global["subterrain-pipe-refund-multiplier"].value))
 	if calc <= 0 then return end -- Exit if the return turns out to be 0.
-
-	if game.players[event.player_index].character then
-		game.players[event.player_index].insert{name = "pipe", count = calc}
-	end
+	
+	insert_items(game.players[event.player_index], "pipe", calc)
 end
 
 
@@ -174,12 +185,13 @@ function subterrainOnMine(event)
 
 	local entity = event.entity
 	local eName = entity.name
-	local player = game.players[event.player_index]
-	local otherEntity = entity.neighbours or entity
+	local otherEntity = entity.neighbours or false
+	if not otherEntity then return end
+	
 	local distance = getDistance(entity, otherEntity)
 
-	--it has no pair, aka itself, or a reward was already given
-	if otherEntity == entity  or (entity.force.name == "neutral") or (otherEntity.force.name == "neutral") then
+	--a reward was already given
+	if (entity.force.name == "neutral") or (otherEntity.force.name == "neutral") then
 		return
 	end
 
@@ -188,10 +200,7 @@ function subterrainOnMine(event)
 	if calc <= 0 then return end -- Exit if the return turns out to be 0.
 	local respectiveBelts = string.gsub(eName, "subterranean", "transport")
 
-
-	if player.character then
-		player.insert{name= respectiveBelts, count = calc}
-	end
+	insert_items(game.players[event.player_index], respectiveBelts, calc)
 end
 
 
@@ -203,12 +212,12 @@ function bobsLogisticsOnMine(event)
 
 	local entity = event.entity
 	local eName = entity.name
-	local player = game.players[event.player_index]
-	local otherEntity = entity.neighbours or entity
+	local otherEntity = entity.neighbours or false
+	if not otherEntity then return end
 	local distance = getDistance(entity, otherEntity)
 
-	--it has no pair, aka itself, or a reward was already given
-	if otherEntity == entity  or (entity.force.name == "neutral") or (otherEntity.force.name == "neutral") then
+	--a reward was already given
+	if (entity.force.name == "neutral") or (otherEntity.force.name == "neutral") then
 		return
 	end
 
@@ -216,8 +225,7 @@ function bobsLogisticsOnMine(event)
 	local calc = (math.floor((distance * settings.global["subterrain-belt-cost-multiplier"].value) * settings.global["subterrain-belt-refund-multiplier"].value))
 	if calc <= 0 then return end -- Exit if the return turns out to be 0.
 	local respectiveBelts = string.gsub(eName, "underground", "transport")
+	
+	insert_items(game.players[event.player_index], respectiveBelts, calc)
 
-	if player.character then
-		player.insert{name= respectiveBelts, count = calc}
-	end
 end

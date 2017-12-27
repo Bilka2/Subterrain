@@ -3,7 +3,7 @@ data:extend({
       {
          type = "technology",
          name = "subterranean-logistics-1",
-         icon = "__Subterrain__/graphics/technology/logistics.png",
+         icon = "__Subterranean__/graphics/technology/logistics.png",
          prerequisites = {"logistics"},
          effects =
             {
@@ -24,7 +24,7 @@ data:extend({
       {
          type = "technology",
          name = "subterranean-logistics-2",
-         icon = "__Subterrain__/graphics/technology/logistics.png",
+         icon = "__Subterranean__/graphics/technology/logistics.png",
          prerequisites = {"logistics-2", "steel-processing", "subterranean-logistics-1"},
          effects =
             {
@@ -45,7 +45,7 @@ data:extend({
       {
          type = "technology",
          name = "subterranean-logistics-3",
-         icon = "__Subterrain__/graphics/technology/logistics.png",
+         icon = "__Subterranean__/graphics/technology/logistics.png",
          prerequisites = {"logistics-3","oil-processing","subterranean-logistics-2"},
          effects =
             {
@@ -66,7 +66,7 @@ data:extend({
       {
          type = "technology",
          name = "subterranean-liquid-logistics",
-         icon = "__Subterrain__/graphics/technology/liquid-logistics.png",
+         icon = "__Subterranean__/graphics/technology/liquid-logistics.png",
          prerequisites = {"oil-processing","steel-processing"},
          effects =
             {
