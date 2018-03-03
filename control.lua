@@ -45,8 +45,7 @@ function subterrainOnBuilt(event)
 	local player = game.players[event.player_index]
 	local eName = entity.name
 
-	--check to see if the place is important
-	if not entity.belt_to_ground_type == "output" or (entity.belt_to_ground_type == "input" and not entity.neighbours) then
+	if not entity.neighbours then
 		return
 	end
 
@@ -79,7 +78,7 @@ function subterrainPipesOnBuilt(event)
 	local otherPipe = entity.neighbours[1][1] or nil
 	
 	if not otherPipe then
-		return nil --no need to do anything if this is the first placed
+		return --no need to do anything if this is the first placed
 	end
 
 	local distance = getDistance(entity, otherPipe)
@@ -105,8 +104,7 @@ function bobsLogisticsOnBuilt(event)
 	local player = game.players[event.player_index]
 	local eName = entity.name
 
-	--check to see if the place is important
-	if not entity.belt_to_ground_type == "output" or (entity.belt_to_ground_type == "input" and not entity.neighbours) then
+	if not entity.neighbours then
 		return
 	end
 
